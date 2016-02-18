@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/mattaitchison/apkghproxy/Godeps/_workspace/src/github.com/google/go-github/github"
@@ -39,5 +40,7 @@ func main() {
 	uri, _ := url.Parse("https://github.com")
 	proxy := httputil.NewSingleHostReverseProxy(uri)
 	http.HandleFunc("/", proxyHandler(client, proxy))
-	http.ListenAndServe(":8080", nil)
+
+	port := os.Getenv("PORT")
+	http.ListenAndServe(":"+port, nil)
 }
