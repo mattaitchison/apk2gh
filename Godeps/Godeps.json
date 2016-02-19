@@ -1,6 +1,6 @@
 {
-	"ImportPath": "github.com/mattaitchison/apkghproxy",
-	"GoVersion": "go1.5.1",
+	"ImportPath": "github.com/mattaitchison/apk2gh",
+	"GoVersion": "go1.6",
 	"Packages": [
 		"./..."
 	],

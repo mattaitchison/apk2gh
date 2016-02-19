@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mattaitchison/apkghproxy/Godeps/_workspace/src/github.com/google/go-github/github"
+	"github.com/google/go-github/github"
 )
 
 func proxyHandler(client *github.Client, proxy *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
