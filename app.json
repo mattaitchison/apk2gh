@@ -1,8 +1,8 @@
 {
-  "name": "apkproxy",
+  "name": "apk2gh",
   "description": "apk github proxy",
   "image": "heroku/go:1.6",
-  "mount_dir": "src/github.com/maitchison/apkproxy",
-  "website": "http://github.com/maitchison/apkproxy",
-  "repository": "http://github.com/maitchison/apkproxy"
+  "mount_dir": "src/github.com/maitchison/apk2gh",
+  "website": "http://github.com/maitchison/apk2gh",
+  "repository": "http://github.com/maitchison/apk2gh"
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -11,11 +12,12 @@ import (
 	"github.com/google/go-github/github"
 )
 
-func proxyHandler(client *github.Client, proxy *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
+func proxyHandler(client *github.Client, proxy *httputil.ReverseProxy) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		parts := strings.Split(r.URL.Path, "/")
 		if len(parts) < 4 {
 			fmt.Fprint(w, "invalid url")
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
@@ -23,12 +25,13 @@ func proxyHandler(client *github.Client, proxy *httputil.ReverseProxy) func(http
 		owner, repo, rest := parts[1], parts[2], parts[4:]
 		release, _, err := client.Repositories.GetLatestRelease(owner, repo)
 		if err != nil {
-			fmt.Fprint(w, err)
+			fmt.Fprint(w, err.Error())
 			return
 		}
 
 		restJoin := strings.Join(rest, "/")
 		u := fmt.Sprintf("%s/%s/releases/download/%s/%s", owner, repo, *release.TagName, restJoin)
+		log.Printf("%s %s %s --> %s", r.RemoteAddr, r.Method, r.URL, u)
 
 		r.URL.Path = u
 		proxy.ServeHTTP(w, r)
@@ -36,11 +39,12 @@ func proxyHandler(client *github.Client, proxy *httputil.ReverseProxy) func(http
 }
 
 func main() {
+	log.SetPrefix("apk2gh | ")
+
 	client := github.NewClient(nil)
 	uri, _ := url.Parse("https://github.com")
 	proxy := httputil.NewSingleHostReverseProxy(uri)
-	http.HandleFunc("/", proxyHandler(client, proxy))
 
 	port := os.Getenv("PORT")
-	http.ListenAndServe(":"+port, nil)
+	log.Fatal(http.ListenAndServe(":"+port, proxyHandler(client, proxy)))
 }
