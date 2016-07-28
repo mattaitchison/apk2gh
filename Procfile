@@ -1,1 +1,1 @@
-web: apkghproxy
+web: apk2gh
