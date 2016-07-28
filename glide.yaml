@@ -1,0 +1,12 @@
+package: github.com/mattaitchison/apkghproxy
+import:
+- package: github.com/google/go-github
+  version: ac4445ca1c9dfacf5c0bbf34b712b23a3bb59b6c
+  subpackages:
+  - github
+- package: github.com/google/go-querystring
+  version: 6bb77fe6f42b85397288d4f6f67ac72f8f400ee7
+  subpackages:
+  - query
+- package: github.com/inconshreveable/go-keen
+  version: 3b8ced996823fd0f94a2f0f1a8c4a991c73463b7

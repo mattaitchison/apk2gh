@@ -1,0 +1,14 @@
+hash: d73e352d3646131f4b37b82fde2ff6bed1bbf423b0fbf567075c1a552ec63a4d
+updated: 2016-07-28T12:03:55.202001028-05:00
+imports:
+- name: github.com/google/go-github
+  version: ac4445ca1c9dfacf5c0bbf34b712b23a3bb59b6c
+  subpackages:
+  - github
+- name: github.com/google/go-querystring
+  version: 6bb77fe6f42b85397288d4f6f67ac72f8f400ee7
+  subpackages:
+  - query
+- name: github.com/inconshreveable/go-keen
+  version: 3b8ced996823fd0f94a2f0f1a8c4a991c73463b7
+testImports: []
