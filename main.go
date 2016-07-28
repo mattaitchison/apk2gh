@@ -8,8 +8,20 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mattaitchison/apkghproxy/Godeps/_workspace/src/github.com/google/go-github/github"
+	"github.com/google/go-github/github"
+	keen "github.com/inconshreveable/go-keen"
 )
+
+var keenClient = &keen.Client{WriteKey: os.Getenv("KEEN_WRITE_KEY"), ProjectID: os.Getenv("KEEN_PROJECT_ID")}
+
+type event struct {
+	Owner       string
+	Repo        string
+	ReleaseName string
+	ReleaseTag  string
+	RemoteAddr  string
+	URL         string
+}
 
 func proxyHandler(client *github.Client, proxy *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +37,18 @@ func proxyHandler(client *github.Client, proxy *httputil.ReverseProxy) func(http
 		if err != nil {
 			fmt.Fprint(w, err)
 			return
+		}
+
+		err = keenClient.AddEvent("usage", &event{
+			Owner:       owner,
+			Repo:        repo,
+			ReleaseName: *release.Name,
+			ReleaseTag:  *release.TagName,
+			RemoteAddr:  r.RemoteAddr,
+			URL:         r.URL.String(),
+		})
+		if err != nil {
+			fmt.Println("keen err:", err)
 		}
 
 		restJoin := strings.Join(rest, "/")
